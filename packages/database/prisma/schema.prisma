@@ -1,0 +1,115 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Role {
+  USER
+  AGENT
+  ADMIN
+}
+
+enum Operation {
+  SALE
+  RENT
+}
+
+enum PropertyStatus {
+  AVAILABLE
+  RESERVED
+  SOLD
+  ARCHIVED
+}
+
+model User {
+  id           String     @id @default(cuid())
+  email        String     @unique
+  name         String
+  passwordHash String
+  role         Role       @default(USER)
+  favorites    Favorite[]
+  properties   Property[]
+  createdAt    DateTime   @default(now())
+}
+
+model Location {
+  id         String     @id @default(cuid())
+  name       String     @unique
+  city       String     @default("Trujillo")
+  properties Property[]
+}
+
+model Category {
+  id         String     @id @default(cuid())
+  name       String     @unique
+  properties Property[]
+}
+
+model Property {
+  id          String         @id @default(cuid())
+  slug        String         @unique
+  title       String
+  description String
+  price       Decimal        @db.Decimal(14, 2)
+  area        Int
+  bedrooms    Int
+  bathrooms   Int
+  parking     Int            @default(0)
+  operation   Operation      @default(SALE)
+  status      PropertyStatus @default(AVAILABLE)
+  featured    Boolean        @default(false)
+  amenities   String[]
+  address     String
+  categoryId  String
+  category    Category       @relation(fields: [categoryId], references: [id])
+  locationId  String
+  location    Location       @relation(fields: [locationId], references: [id])
+  agentId     String?
+  agent       User?          @relation(fields: [agentId], references: [id])
+  media       Media[]
+  inquiries   Inquiry[]
+  favorites   Favorite[]
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  @@index([operation, status, price])
+  @@index([locationId, categoryId])
+}
+
+model Media {
+  id         String   @id @default(cuid())
+  url        String
+  alt        String
+  kind       String   @default("IMAGE")
+  position   Int      @default(0)
+  propertyId String
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+}
+
+model Inquiry {
+  id         String    @id @default(cuid())
+  name       String
+  email      String
+  phone      String
+  message    String
+  consent    Boolean
+  status     String    @default("NEW")
+  propertyId String?
+  property   Property? @relation(fields: [propertyId], references: [id], onDelete: SetNull)
+  createdAt  DateTime  @default(now())
+}
+
+model Favorite {
+  userId     String
+  propertyId String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+
+  @@id([userId, propertyId])
+}
