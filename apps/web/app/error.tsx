@@ -9,8 +9,7 @@ export default function Error({ reset }: { reset: () => void }) {
         este espacio.
       </h1>
       <p>
-        Comprueba que el servidor y la base de datos estén disponibles y vuelve
-        a intentarlo.
+        Ocurrió un problema al mostrar esta página. Vuelve a intentarlo.
       </p>
       <button className="button sand" onClick={reset}>
         Volver a intentar

@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Platform } from "../components/platform";
+import { SiteShell } from "../components/site-shell";
 import { Motion } from "../components/motion";
 import "./globals.css";
 export const metadata: Metadata = {
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     template: "%s · HÁBITA",
   },
   description:
-    "Espacios que inspiran. Descubre casas y departamentos con arquitectura excepcional en Trujillo, Perú. Plataforma inmobiliaria de demostración.",
+    "Conoce HÁBITA, una propuesta de información y orientación inmobiliaria en Trujillo, Perú.",
   robots: { index: false, follow: false },
   openGraph: {
     title: "HÁBITA · Espacios que inspiran",
@@ -30,7 +30,7 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body>
-        <Platform>{children}</Platform>
+        <SiteShell>{children}</SiteShell>
         <Motion />
       </body>
     </html>

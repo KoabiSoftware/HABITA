@@ -1,21 +1,6 @@
 import Link from "next/link";
-import {
-  ArrowUpRight,
-  Search,
-  CalendarDays,
-  House,
-} from "lucide-react";
-import { PropertyCard } from "../components/property-card";
-import { SearchForm } from "../components/search-form";
-import { serverApi } from "../lib/server";
-import type { Property, Option } from "../lib/types";
-export const dynamic = "force-dynamic";
-export default async function Home() {
-  const [properties, locations, categories] = await Promise.all([
-    serverApi<{ items: Property[] }>("properties?operation=SALE&limit=3"),
-    serverApi<Option[]>("locations"),
-    serverApi<Option[]>("categories"),
-  ]);
+import { ArrowUpRight, Search, CalendarDays, House } from "lucide-react";
+export default function Home() {
   return (
     <main id="contenido" className="home-page">
       <section className="hero">
@@ -39,22 +24,41 @@ export default async function Home() {
             <span>altura de tu vida.</span>
           </h1>
           <Link className="button sand magnetic" href="/propiedades">
-            Explorar propiedades
+            Conoce nuestra propuesta
           </Link>
-        </div>
-        <div className="search-placement">
-          <SearchForm locations={locations} categories={categories} />
         </div>
       </section>
       <section className="featured section-wrap" id="destacadas">
         <div className="section-heading" data-reveal>
           <div>
-            <h2>Propiedades que destacan</h2>
+            <p className="eyebrow">SERVICIOS HÁBITA</p>
+            <h2>Información clara para elegir con confianza.</h2>
           </div>
         </div>
-        <div className="property-grid">
-          {properties.items.map((p, i) => (
-            <PropertyCard key={p.id} property={p} index={i} />
+        <div className="services-grid">
+          {[
+            {
+              icon: Search,
+              title: "Orientación inmobiliaria",
+              copy: "Conoce los aspectos importantes para iniciar la búsqueda de un espacio.",
+            },
+            {
+              icon: CalendarDays,
+              title: "Visitas con propósito",
+              copy: "Prepara tus preguntas y evalúa cada lugar de acuerdo con tus necesidades.",
+            },
+            {
+              icon: House,
+              title: "Decisiones informadas",
+              copy: "Revisa los detalles y busca asesoramiento profesional antes de decidir.",
+            },
+          ].map((service, index) => (
+            <article key={service.title} data-reveal>
+              <span className="service-number">0{index + 1}</span>
+              <service.icon strokeWidth={1} />
+              <h3>{service.title}</h3>
+              <p>{service.copy}</p>
+            </article>
           ))}
         </div>
       </section>
@@ -85,7 +89,7 @@ export default async function Home() {
                 {[
                   { icon: House, title: "Compra con orientación", href: "/contacto" },
                   { icon: CalendarDays, title: "Agenda una visita", href: "/contacto" },
-                  { icon: Search, title: "Encuentra tu espacio", href: "/propiedades" },
+                  { icon: Search, title: "Conoce nuestra propuesta", href: "/propiedades" },
                 ].map((step) => (
                   <Link href={step.href} className="step" key={step.title}>
                     <step.icon strokeWidth={1.2} />

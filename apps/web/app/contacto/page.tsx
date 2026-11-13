@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { ArrowUpRight, MapPin, Clock3 } from "lucide-react";
-import { ContactForm, WhatsAppLink } from "../../components/contact-form";
+import { WhatsAppLink } from "../../components/contact-options";
 export const metadata: Metadata = { title: "Hablemos de tu próximo hogar" };
 export default function Contact() {
   return (
@@ -40,9 +40,9 @@ export default function Contact() {
           <p className="eyebrow">CONVERSEMOS</p>
           <h2>Nos gustaría conocerte.</h2>
           <p className="muted">
-            Completa el formulario y registra tu consulta con nuestro equipo.
+            Este sitio comparte información institucional de HÁBITA. No registra
+            consultas ni almacena datos personales.
           </p>
-          <ContactForm />
           <div className="contact-alternative">
             <WhatsAppLink />
           </div>
